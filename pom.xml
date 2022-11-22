@@ -57,7 +57,12 @@
 			<artifactId>spring-security-core</artifactId>
 			<version>5.7.3</version>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>io.vavr</groupId>
+			<artifactId>vavr</artifactId>
+			<version>0.10.3</version>
+		</dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

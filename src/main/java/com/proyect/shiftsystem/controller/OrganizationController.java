@@ -1,13 +1,13 @@
 package com.proyect.shiftsystem.controller;
 
 import com.proyect.shiftsystem.dto.OrganizationDto;
+import com.proyect.shiftsystem.message.MessageResponse;
 import com.proyect.shiftsystem.service.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/organization")
@@ -27,8 +27,8 @@ public class OrganizationController {
         return ResponseEntity.ok(organizationService.getListOrganizationDto(page));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, String>> deleteById(@PathVariable Long id){
-        return ResponseEntity.ok(organizationService.delete(id));
+    public ResponseEntity<MessageResponse> deleteById(@PathVariable Long id, HttpServletRequest request){
+        return ResponseEntity.ok(organizationService.delete(id, request));
     }
     @PutMapping("/{id}")
     public ResponseEntity<OrganizationDto> update(@PathVariable Long id, @RequestBody OrganizationDto organizationDto){

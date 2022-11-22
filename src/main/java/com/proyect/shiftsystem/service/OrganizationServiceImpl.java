@@ -2,14 +2,17 @@ package com.proyect.shiftsystem.service;
 import com.proyect.shiftsystem.dto.OrganizationDto;
 import com.proyect.shiftsystem.dto.OrganizationMapper;
 import com.proyect.shiftsystem.excepcion.NotFoundException;
+import com.proyect.shiftsystem.message.MessageResponse;
 import com.proyect.shiftsystem.model.Organization;
 import com.proyect.shiftsystem.repository.OrganizationRepository;
+import org.apache.logging.log4j.message.Message;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -41,19 +44,19 @@ public class OrganizationServiceImpl implements OrganizationService {
         return organizationRepository.findAll(PageRequest.of(page, 20)).map(orgMapper::returnPartDtoFromEntity).getContent();
     }
     @Override
-    public Map<String, String> delete(Long id){
+    public MessageResponse delete(Long id, HttpServletRequest request){
     Organization organizationFound = findEntityById(id);
     organizationRepository.delete(organizationFound);
-    return Map.of("Message", "entity with id " + id + " was deleted successful");
+    return new MessageResponse("entity with id " + id + " was deleted successful", 200, request.getRequestURI());
     }
     @Autowired
     private ModelMapper mapper;
     @Override
     public OrganizationDto updateById(Long id, OrganizationDto dto) {
+        Organization entity = findEntityById(id);
         mapper.getConfiguration().setSkipNullEnabled(true);
-        Organization organizationFound = findEntityById(id);
-        mapper.map(dto, organizationFound);
-        organizationRepository.save(organizationFound);
+        mapper.map(dto, entity);
+        organizationRepository.save(entity);
 
 // ModelMapper nos permite hacer todas las linas que estan a continuacion indicando que si es null no haga el mapeo
 //        Organization organizationFound = findEntityById(id);
@@ -64,6 +67,6 @@ public class OrganizationServiceImpl implements OrganizationService {
 //            if(dto.getShiftDate()!= null) entity.setShiftHourDate(dto.getShiftHourDate());
 //            organizationRepository.save(entity);
 //        });
-        return orgMapper.returnPartDtoFromEntity(organizationFound);
+        return orgMapper.returnPartDtoFromEntity(entity);
     }
 }
