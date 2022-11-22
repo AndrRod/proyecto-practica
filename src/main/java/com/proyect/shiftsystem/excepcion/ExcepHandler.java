@@ -12,4 +12,8 @@ public class ExcepHandler {
     public ResponseEntity<Map<String, String>> notFoundException(NotFoundException exp){
         return ResponseEntity.status(404).body(Map.of("Message", exp.getMessage()));
     }
+    @ExceptionHandler({BadRequestException.class})
+    public ResponseEntity<Map<String, String>> notFoundException(BadRequestException exp){
+        return ResponseEntity.status(400).body(Map.of("Message", exp.getMessage()));
+    }
 }
